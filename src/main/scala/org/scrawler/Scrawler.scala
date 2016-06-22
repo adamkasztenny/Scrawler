@@ -9,7 +9,7 @@ object Scrawler {
 
         val jsonConfig = Json.parse(rawJsonConfig)
        
-        val seed: Seq[String] = (jsonConfig \ "seed").as[Seq[String]]
+        val seed: Set[String] = (jsonConfig \ "seed").as[Set[String]]
         val databaseURI = (jsonConfig \ "dburi").as[String]
 
         val queue = new Queue(seed)

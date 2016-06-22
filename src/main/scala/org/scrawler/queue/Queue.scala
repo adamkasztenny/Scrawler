@@ -1,13 +1,17 @@
 package org.scrawler.queue
 
-class Queue(seed: Seq[String]) {
-    val websites: Seq[String] = seed.map(appendHttp(_))
+import org.scrawler.website.extractor.Extractor
+import java.net.URL
 
-    private def appendHttp(website: String) = {
-        var appended = ""
+class Queue(seed: Set[String]) {
+    val websites: collection.mutable.Set[URL] = collection.mutable.Set(seed.map(makeURL(_)))
 
-        if (!website.contains("http")) appended += "http://"
-        if (!website.contains("www.")) appended += "www."
-        appended + website
+    def getFromQueueAndAddLinked = {
+        Extractor.getLinkedWebsites(websites.head)
+    }
+
+    private def makeURL(website: String): URL = {
+        if (!website.contains("http")) return new URL("http://" + website)
+        new URL(website)
     }
 }
