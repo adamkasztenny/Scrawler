@@ -1,6 +1,7 @@
 package org.scrawler
 
 import play.api.libs.json.Json
+import org.scrawler.queue.Queue
 
 object Scrawler {
     def main(args: Array[String]): Unit = {        
@@ -10,5 +11,7 @@ object Scrawler {
        
         val seed: Seq[String] = (jsonConfig \ "seed").as[Seq[String]]
         val databaseURI = (jsonConfig \ "dburi").as[String]
+
+        val queue = new Queue(seed)
     }
 }
