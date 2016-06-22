@@ -1,9 +1,9 @@
 package org.scrawler
 
-import org.scrawler.json.SeedParser
-
 object Scrawler {
-    def main(args: Array[String]): Unit = {
-        SeedParser.parseSeed(args(0))
+    def main(args: Array[String]): Unit = {        
+        val jsonConfigFile = scala.io.Source.fromFile(args(0)).mkString
+
+        
     }
 }
