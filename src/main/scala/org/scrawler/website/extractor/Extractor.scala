@@ -23,7 +23,7 @@ object Extractor {
            }
         
            catch {
-            case e: java.net.MalformedURLException => new URL(driver.getCurrentUrl + element.getAttribute("href")) 
+            case e: java.net.MalformedURLException => new URL("https://default.com") 
            }
         })
         links
