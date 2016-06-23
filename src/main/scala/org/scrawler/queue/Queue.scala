@@ -19,7 +19,7 @@ class Queue(seed: Set[String]) {
     }
 
     def retrieveSites = {
-        while (true) {
+        while (!websites.isEmpty) {
             getFromQueueAndAddLinked
         }
     }

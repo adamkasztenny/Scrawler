@@ -7,6 +7,7 @@ import collection.JavaConverters._
 import org.openqa.selenium.htmlunit._
 import org.openqa.selenium.WebElement
 
+// TODO: rename to LinkExtractor
 object Extractor {
     val driver = new HtmlUnitDriver
     
@@ -15,6 +16,7 @@ object Extractor {
         println(website)
         
         val html = driver.get(website.toString)
+        // TODO: new WebPageExtractor(html).getWebPage
         val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
            try {
              new URL(element.getAttribute("href"))
