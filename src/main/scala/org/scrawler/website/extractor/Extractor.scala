@@ -1,17 +1,21 @@
 package org.scrawler.website.extractor
 
-import scala.io.Source
-import scala.util.matching.Regex
 import java.net.URL
+import collection.JavaConverters._
+
+// big thanks to https://joshrendek.com/2013/10/parsing-html-in-scala/ for the HTML parsing stuff
+import org.openqa.selenium.htmlunit._
+import org.openqa.selenium.WebElement
 
 object Extractor {
-    // thanks to http://stackoverflow.com/questions/7586605/scala-pattern-matching-against-urls
-    val URLRegex = """(http|https)://(.*)\.([a-z]+)""".r
-
+    val driver = new HtmlUnitDriver
+    
     def getLinkedWebsites(website: URL): Set[URL] = {
-        // thanks to http://alvinalexander.com/scala/scala-how-to-download-url-contents-to-string-file
-        val html = Source.fromURL(website.toString).mkString
-        println(html)
-        (URLRegex findAllIn html).toSet.map(new URL(_: String))
+        println(website.toString)
+        val html = driver.get(website.toString)
+        val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
+            new URL(element.getAttribute("href"))
+        })
+        links
     }
 }
