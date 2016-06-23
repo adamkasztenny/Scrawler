@@ -15,8 +15,8 @@ object Extractor {
         if (website.toString.contains("mailto")) return Set()
         println(website)
         
-        val html = driver.get(website.toString)
-        // TODO: new WebPageExtractor(html).getWebPage
+        driver.get(website.toString)
+        WebPageExtractor.getWebPage(driver)
         val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
            try {
              new URL(element.getAttribute("href"))

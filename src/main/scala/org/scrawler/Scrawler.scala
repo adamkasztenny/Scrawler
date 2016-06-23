@@ -13,5 +13,9 @@ object Scrawler {
         val databaseURI = (jsonConfig \ "dburi").as[String]
 
         val queue = new Queue(seed)
+
+        while(!queue.empty) {
+            queue.getFromQueueAndAddLinked
+        }
     }
 }
