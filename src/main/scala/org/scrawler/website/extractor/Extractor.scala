@@ -11,10 +11,18 @@ object Extractor {
     val driver = new HtmlUnitDriver
     
     def getLinkedWebsites(website: URL): Set[URL] = {
-        println(website.toString)
+        if (website.toString.contains("mailto")) return Set()
+        println(website)
+        
         val html = driver.get(website.toString)
         val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
-            new URL(element.getAttribute("href"))
+           try {
+             new URL(element.getAttribute("href"))
+           }
+        
+           catch {
+            case e: java.net.MalformedURLException => new URL("https://default.com") 
+           }
         })
         links
     }
