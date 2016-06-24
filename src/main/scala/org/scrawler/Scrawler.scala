@@ -8,7 +8,7 @@ import org.scrawler.db.mongodb.MongoDBDatabaseConnection
 object Scrawler {
     var mongoDBDatabaseConnection: MongoDBDatabaseConnection = null
 
-    def main(args: Array[String]): Unit = {        
+    def main(args: Array[String]): Unit = {
         val rawJsonConfig = scala.io.Source.fromFile(args(0)).mkString
 
         val jsonConfig = Json.parse(rawJsonConfig)

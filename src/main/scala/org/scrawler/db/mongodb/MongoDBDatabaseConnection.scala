@@ -11,18 +11,20 @@ import java.util.Calendar
 class MongoDBDatabaseConnection(uri: String, dbName: String) extends DatabaseConnection(uri, dbName) {
     val mongoClient: MongoClient = MongoClient(uri) 
 
-    def saveWebPageToDatabase(webPage: WebPage) = {
+    def saveWebPageToDatabase(webPage: WebPage): Unit = {
         val db = mongoClient(dbName)
         val collection = db("scrawler1")
 
-        collection.insert(
-            MongoDBObject(
-                "title" -> webPage.title,
-                "url" -> webPage.url.toString,
-                "date" -> Calendar.getInstance.getTime,
-                "keywords" -> webPage.keywords,
-                "body" -> webPage.body
-            )
-        )  
+        val existingURLQuery = MongoDBObject("url" -> webPage.url.toString)
+
+        val update = $set(
+            "title" -> webPage.title,
+            "url" -> webPage.url.toString,
+            "date" -> Calendar.getInstance.getTime,
+            "keywords" -> webPage.keywords,
+            "body" -> webPage.body
+        )
+
+        collection.update(existingURLQuery, update, upsert = true)
     }
 }
