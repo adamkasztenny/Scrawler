@@ -26,7 +26,7 @@ object WebPageExtractor {
         val headers2 = getElements(driver, "h2")
         val bold = getElements(driver, "b") ++ getElements(driver, "strong")
 
-        if (bold == null || headers1 == null || headers2 == null) {
+        if (title == null || bold == null || headers1 == null || headers2 == null) {
             return WebPage("Default", new URL("http://default.com"), "non-HTML page found", Set(""))
         }
 
