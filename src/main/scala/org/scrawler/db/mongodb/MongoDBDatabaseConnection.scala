@@ -8,7 +8,7 @@ import java.util.Calendar
 
 // thanks to http://mongodb.github.io/casbah/3.1/getting-started/ for all the help!
 
-class MongoDBDatabaseConnection(uri: String, dbName: String) extends DatabaseConnection(uri) {
+class MongoDBDatabaseConnection(uri: String, dbName: String) extends DatabaseConnection(uri, dbName) {
     val mongoClient: MongoClient = MongoClient(uri) 
 
     def saveWebPageToDatabase(webPage: WebPage) = {

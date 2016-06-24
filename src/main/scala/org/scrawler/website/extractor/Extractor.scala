@@ -16,21 +16,32 @@ object Extractor {
         if (website.toString.contains("mailto")) return Set()
         if (website.toString.contains(".png")) return Set()
         if (website.toString.contains(".jpeg")) return Set()
+        if (website.toString.contains(".pdf")) return Set()
+        if (website.toString.contains(".txt")) return Set()
         
         println(website) // TODO: replace with logging statement
         
         driver.get(website.toString)
+
         WebPageExtractor.getWebPage(driver, website)
 
-        val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
-           try {
-             new URL(element.getAttribute("href"))
-           }
+        val links = {
+            try {  
+                driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
+                try {
+                     new URL(element.getAttribute("href"))
+                }    
         
-           catch {
-            case e: java.net.MalformedURLException => new URL("https://default.com") 
-           }
-        })
+                catch {
+                    case e: java.net.MalformedURLException => new URL("https://default.com") 
+                }
+                })
+            }
+
+            catch {
+                case e: java.lang.IllegalStateException => Set(new URL("https://default.com")) 
+            }
+        }
         links
     }
 }
