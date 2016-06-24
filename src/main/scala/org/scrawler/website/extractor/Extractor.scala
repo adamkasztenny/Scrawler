@@ -12,12 +12,7 @@ object Extractor {
     val driver = new HtmlUnitDriver
     
     def getLinkedWebsites(website: URL): Set[URL] = {
-        // TODO: refactor & improve
-        if (website.toString.contains("mailto")) return Set()
-        if (website.toString.contains(".png")) return Set()
-        if (website.toString.contains(".jpeg")) return Set()
-        if (website.toString.contains(".pdf")) return Set()
-        if (website.toString.contains(".txt")) return Set()
+        if (isObviouslyNotHTML(website)) return Set()
         
         println(website) // TODO: replace with logging statement
        
@@ -50,4 +45,13 @@ object Extractor {
         }
         links
     }
+
+    private def isObviouslyNotHTML(website: URL): Boolean = {
+        val websiteString = website.toString
+        websiteString.contains("mailto") ||
+        websiteString.contains(".png")   ||
+        websiteString.contains(".jpeg")  ||
+        websiteString.contains(".pdf")   ||
+        websiteString.contains(".txt") 
+    } 
 }
