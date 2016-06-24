@@ -11,8 +11,17 @@ import java.net.URL
 object WebPageExtractor {
    def getWebPage(driver: HtmlUnitDriver, url: URL): WebPage = {
         val title = driver.getTitle
-        val body = driver.findElementByXPath("//body").getText
-        
+    
+        val body = {
+            try {
+                driver.findElementByXPath("//body").getText
+            }
+       
+            catch {
+                case e: java.lang.IllegalStateException => "" 
+            }     
+        }
+
         val headers1 = getElements(driver, "h1")
         val headers2 = getElements(driver, "h2")
         val bold = getElements(driver, "b") ++ getElements(driver, "strong")
@@ -24,7 +33,15 @@ object WebPageExtractor {
    }
 
 
-   private def getElements(driver: HtmlUnitDriver, element: String) = driver.findElementsByXPath("//" + element).asScala.toSet.map({element: WebElement => 
-            element.getText
-        })
+    private def getElements(driver: HtmlUnitDriver, element: String) = {
+        try { 
+            driver.findElementsByXPath("//" + element).asScala.toSet.map({element: WebElement => 
+                element.getText
+            })
+        }
+
+        catch {
+            case e: java.lang.IllegalStateException => Set("") 
+        }
+    }
 }

@@ -20,8 +20,14 @@ object Extractor {
         if (website.toString.contains(".txt")) return Set()
         
         println(website) // TODO: replace with logging statement
-        
-        driver.get(website.toString)
+       
+        try { 
+            driver.get(website.toString)
+        }
+
+        catch {
+            case e: java.lang.Exception => return Set(new URL("http://default.com"))
+        }
 
         WebPageExtractor.getWebPage(driver, website)
 
@@ -33,13 +39,13 @@ object Extractor {
                 }    
         
                 catch {
-                    case e: java.net.MalformedURLException => new URL("https://default.com") 
+                    case e: java.net.MalformedURLException => new URL("http://default.com") 
                 }
                 })
             }
 
             catch {
-                case e: java.lang.IllegalStateException => Set(new URL("https://default.com")) 
+                case e: java.lang.IllegalStateException => Set(new URL("http://default.com")) 
             }
         }
         links
