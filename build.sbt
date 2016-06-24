@@ -6,7 +6,9 @@ lazy val commonSettings = Seq(
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
 
-libraryDependencies ++= Seq("com.typesafe.play" %% "play-json" % "2.3.4",
+libraryDependencies ++= Seq(
+    "com.typesafe.play" %% "play-json" % "2.3.4",
     "org.seleniumhq.webdriver" % "webdriver-selenium" % "0.9.7376",
-    "org.seleniumhq.webdriver" % "webdriver-htmlunit" % "0.9.7376"
+    "org.seleniumhq.webdriver" % "webdriver-htmlunit" % "0.9.7376",
+    "org.mongodb" %% "casbah" % "3.1.1"
 )

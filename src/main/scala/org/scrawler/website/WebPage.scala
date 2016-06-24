@@ -1,5 +1,8 @@
 package org.scrawler.website
 
-class WebPage(title: String, body: String, keywords: Set[String]) {
-    // TODO: add date accessed
+import org.scrawler.Scrawler
+import java.net.URL
+
+case class WebPage(title: String, url: URL, body: String, keywords: Set[String]) {
+    Scrawler.databaseConnection.saveWebPageToDatabase(this)
 }

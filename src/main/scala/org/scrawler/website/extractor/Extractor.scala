@@ -12,11 +12,16 @@ object Extractor {
     val driver = new HtmlUnitDriver
     
     def getLinkedWebsites(website: URL): Set[URL] = {
+        // TODO: refactor & improve
         if (website.toString.contains("mailto")) return Set()
-        println(website)
+        if (website.toString.contains(".png")) return Set()
+        if (website.toString.contains(".jpeg")) return Set()
+        
+        println(website) // TODO: replace with logging statement
         
         driver.get(website.toString)
-        WebPageExtractor.getWebPage(driver)
+        WebPageExtractor.getWebPage(driver, website)
+
         val links = driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
            try {
              new URL(element.getAttribute("href"))
