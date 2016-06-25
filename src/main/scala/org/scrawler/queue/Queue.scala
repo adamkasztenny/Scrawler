@@ -1,6 +1,6 @@
 package org.scrawler.queue
 
-import org.scrawler.website.extractor.Extractor
+import org.scrawler.website.extractor.LinkExtractor
 import java.net.URL
 
 class Queue(seed: Set[String]) {
@@ -12,7 +12,7 @@ class Queue(seed: Set[String]) {
     def getFromQueueAndAddLinked = {
         val current = websites.head
         if (!seen.contains(current)) {
-            websites ++= Extractor.getLinkedWebsites(current)
+            websites ++= LinkExtractor.getLinkedWebsites(current)
             seen += current
         }
         websites -= current

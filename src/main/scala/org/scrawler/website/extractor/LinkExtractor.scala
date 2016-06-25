@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory
 import org.openqa.selenium.htmlunit._
 import org.openqa.selenium.WebElement
 
-// TODO: rename to LinkExtractor
-object Extractor {
+object LinkExtractor {
     val logger = LoggerFactory.getLogger(this.getClass) 
 
     val driver = new HtmlUnitDriver
