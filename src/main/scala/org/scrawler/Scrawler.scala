@@ -20,7 +20,8 @@ object Scrawler {
         val databaseType = (jsonConfig \ "dbtype").as[String]
 
         databaseType match {
-            case "mongodb" => databaseConnection = new MongoDBDatabaseConnection (databaseURI, databaseName)
+            case "mongodb" => databaseConnection = new MongoDBDatabaseConnection(databaseURI, databaseName)
+            case _ => throw new java.lang.UnsupportedOperationException(s"$databaseType is not supported")
         }
 
         val queue = new Queue(seed)
