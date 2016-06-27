@@ -1,6 +1,6 @@
 { 
    "seed": ["http://www.alexa.com/topsites", "http://www.scala-lang.org/", "https://en.wikipedia.org", "https://www.utoronto.ca"],
-   "dburi": "localhost:27017",
+   "dburi": "mongodb://localhost:27017",
    "dbname": "scrawler",
    "dbtype": "mongodb"
 }
