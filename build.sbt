@@ -1,13 +1,13 @@
-lazy val commonSettings = Seq(
-  organization := "slideon",
-  version := "0.1.0",
-  scalaVersion := "2.11.6"
-)
+organization := "slideon"
+
+version := "0.1.1"
+
+scalaVersion := "2.12.4"
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
 
 libraryDependencies ++= Seq(
-    "com.typesafe.play" %% "play-json" % "2.3.4",
+    "com.typesafe.play" %% "play-json" % "2.6.8",
 
     "org.seleniumhq.webdriver" % "webdriver-selenium" % "0.9.7376",
     "org.seleniumhq.webdriver" % "webdriver-htmlunit" % "0.9.7376",
