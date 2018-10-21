@@ -13,7 +13,7 @@ object Scrawler {
         val configuration = ConfigurationReader(configurationPath)
 
         configuration.databaseConfiguration.`type` match {
-            case "mongodb" => databaseConnection = new MongoDBDatabaseConnection(configuration.databaseConfiguration.uri, configuration.databaseConfiguration.name)
+            case "mongodb" => databaseConnection = MongoDBDatabaseConnection(configuration.databaseConfiguration.uri, configuration.databaseConfiguration.name)
             case _ => throw new java.lang.UnsupportedOperationException(s"${configuration.databaseConfiguration.`type`} is not supported")
         }
 
