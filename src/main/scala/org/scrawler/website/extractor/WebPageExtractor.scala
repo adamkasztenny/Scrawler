@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement
 import java.net.URL
 
 object WebPageExtractor {
-   def getWebPage(driver: HtmlUnitDriver, url: URL): WebPage = {
+   def apply(driver: HtmlUnitDriver, url: URL): WebPage = {
         var title = driver.getTitle
 
         if (title == null) title = ""    

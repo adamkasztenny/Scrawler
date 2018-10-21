@@ -12,11 +12,11 @@ import org.openqa.selenium.htmlunit._
 import org.openqa.selenium.WebElement
 
 object LinkExtractor {
-    val logger = LoggerFactory.getLogger(this.getClass) 
+    private val logger = LoggerFactory.getLogger(this.getClass)
 
-    val driver = new HtmlUnitDriver
+    private val driver = new HtmlUnitDriver
     
-    def getLinkedWebsites(website: URL): Set[URL] = {
+    def apply(website: URL): Set[URL] = {
         if (isObviouslyNotHTML(website)) return Set()
         
         try { 
@@ -29,7 +29,7 @@ object LinkExtractor {
         
         logger.info("Currently scrawling " + website)
 
-        WebPageExtractor.getWebPage(driver, website)
+        WebPageExtractor(driver, website)
 
         val links = {
             try {  

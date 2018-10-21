@@ -12,7 +12,7 @@ class Queue(seed: Set[String]) {
     def getFromQueueAndAddLinked = {
         val current = websites.head
         if (!seen.contains(current)) {
-            websites ++= LinkExtractor.getLinkedWebsites(current)
+            websites ++= LinkExtractor(current)
             seen += current
         }
         websites -= current
