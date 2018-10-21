@@ -1,8 +1,8 @@
 package org.scrawler
 
-import org.scrawler.db.DatabaseConnection
 import org.scrawler.queue.Queue
-import org.scrawler.db.mongodb.MongoDBDatabaseConnection
+import org.scrawler.db.DatabaseFactory
+import org.scrawler.db.DatabaseConnection
 import org.scrawler.configuration.ConfigurationReader
 
 object Scrawler {
@@ -12,11 +12,7 @@ object Scrawler {
         val configurationPath = args(0)
         val configuration = ConfigurationReader(configurationPath)
 
-        configuration.databaseConfiguration.`type` match {
-            case "mongodb" => databaseConnection = MongoDBDatabaseConnection(configuration.databaseConfiguration.uri, configuration.databaseConfiguration.name)
-            case _ => throw new java.lang.UnsupportedOperationException(s"${configuration.databaseConfiguration.`type`} is not supported")
-        }
-
+        databaseConnection = DatabaseFactory(configuration.databaseConfiguration) 
         val queue = new Queue(configuration.seed)
 
         runScrawler(queue)

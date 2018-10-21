@@ -15,7 +15,7 @@ object ConfigurationReader {
 
         val uri = (jsonConfig \ "database" \ "uri").as[String]
         val name = (jsonConfig \ "database" \ "name").as[String]
-        val `type` = (jsonConfig \ "database" "type").as[String]
+        val `type` = (jsonConfig \ "database" \ "type").as[String]
 
         Configuration(seed = seed, DatabaseConfiguration(uri = uri, name = name, `type` = `type`))
   }

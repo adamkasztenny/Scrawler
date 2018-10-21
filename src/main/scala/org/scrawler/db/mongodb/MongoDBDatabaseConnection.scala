@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory
 
 // thanks to http://mongodb.github.io/casbah/3.1/getting-started/ for all the help!
 
-object MongoDBDatabaseConnection(uri: String, dbName: String) extends DatabaseConnection(uri, dbName) {
+private [db] class MongoDBDatabaseConnection(uri: String, dbName: String) extends DatabaseConnection(uri, dbName) {
     val logger = LoggerFactory.getLogger(this.getClass)
 
     // thanks http://stackoverflow.com/questions/32322166/mongoexception-on-url-format-when-attempting-connection-to-mongolab#34723804
