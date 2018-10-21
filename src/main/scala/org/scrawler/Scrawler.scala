@@ -6,7 +6,7 @@ import org.scrawler.db.DatabaseConnection
 import org.scrawler.configuration.ConfigurationReader
 
 object Scrawler {
-    var databaseConnection: DatabaseConnection = null
+    private var databaseConnection: DatabaseConnection = null
 
     def main(args: Array[String]): Unit = {
         val configurationPath = args(0)
