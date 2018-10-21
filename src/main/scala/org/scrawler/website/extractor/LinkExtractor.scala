@@ -24,9 +24,9 @@ object LinkExtractor {
         }
 
         catch {
-            case e: java.lang.Exception => return Set.empty
+            case e: java.lang.Exception => return Set(new URL("http://default.com"))
         }
-        
+
         logger.info("Currently scrawling " + website)
 
         WebPageExtractor(website)
@@ -38,13 +38,13 @@ object LinkExtractor {
                 }
 
                 catch {
-                    case e: java.net.MalformedURLException => return Set.empty
+                    case e: java.net.MalformedURLException => new URL("http://default.com")
                 }
             })
         }
 
         catch {
-            case e: java.lang.IllegalStateException => return Set.empty
+            case e: java.lang.IllegalStateException => Set(new URL("http://default.com"))
         }
     }
 
@@ -57,3 +57,4 @@ object LinkExtractor {
         websiteString.contains(".txt") 
     } 
 }
+
