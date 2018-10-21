@@ -4,6 +4,7 @@ import org.scrawler.queue.Queue
 import org.scrawler.db.DatabaseFactory
 import org.scrawler.db.DatabaseConnection
 import org.scrawler.configuration.ConfigurationReader
+import scala.annotation.tailrec
 
 object Scrawler {
     private var databaseConnection: DatabaseConnection = null
@@ -20,5 +21,11 @@ object Scrawler {
 
     def getDatabaseConnection = databaseConnection
     
-    private def runScrawler(queue: Queue) = while(!queue.empty) { queue.getFromQueueAndAddLinked }
+    @tailrec
+    private def runScrawler(queue: Queue): Unit =
+      if (queue.empty) return
+      else {
+        queue.getFromQueueAndAddLinked
+        runScrawler(queue)
+      }
 }
