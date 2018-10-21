@@ -9,10 +9,8 @@ import org.openqa.selenium.WebElement
 import java.net.URL
 
 object WebPageExtractor {
-   def apply(driver: HtmlUnitDriver, url: URL): WebPage = {
-        var title = driver.getTitle
-
-        if (title == null) title = ""    
+   def apply(url: URL)(implicit driver: HtmlUnitDriver): WebPage = {
+        val title = Option(driver.getTitle).getOrElse("")
 
         val body = {
             try {
@@ -20,13 +18,11 @@ object WebPageExtractor {
             }
        
             catch {
-                case e: java.lang.IllegalStateException => "" 
+                case e: java.lang.IllegalStateException => ""
             }     
         }
 
-        val headers = getHeaders(driver)
-        val bold = getElements(driver, "b") ++ getElements(driver, "strong")
-
+        val bold = elements("b") ++ elements("strong")
         val keywords = bold ++ headers ++ title.split(" ").toSet
         val sanitizedKeywords = keywords.flatMap(_.split(" ").toSet).map(_.toLowerCase).map({
           keyword: String => keyword.replace(",", "").replace(".", "")
@@ -35,12 +31,11 @@ object WebPageExtractor {
         new WebPage(title, url, body, sanitizedKeywords)
    }
 
-    private def getHeaders(driver: HtmlUnitDriver): Set[String] =
-      (for (i <- 1 to 6) yield getElements(driver, s"h$i")).toSet.flatten
+    private def headers(implicit driver: HtmlUnitDriver): Set[String] = (1 to 6).flatMap(i => elements(s"h$i")).toSet
 
-    private def getElements(driver: HtmlUnitDriver, element: String) = {
+    private def elements(tag: String)(implicit driver: HtmlUnitDriver) = {
         try { 
-            driver.findElementsByXPath("//" + element).asScala.toSet.map({element: WebElement => 
+            driver.findElementsByXPath("//" + tag).asScala.toSet.map({element: WebElement =>
                 element.getText
             })
         }

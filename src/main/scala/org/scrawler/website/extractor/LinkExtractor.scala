@@ -14,7 +14,7 @@ import org.openqa.selenium.WebElement
 object LinkExtractor {
     private val logger = LoggerFactory.getLogger(this.getClass)
 
-    private val driver = new HtmlUnitDriver
+    private implicit val driver = new HtmlUnitDriver
     
     def apply(website: URL): Set[URL] = {
         if (isObviouslyNotHTML(website)) return Set.empty
@@ -29,7 +29,7 @@ object LinkExtractor {
         
         logger.info("Currently scrawling " + website)
 
-        WebPageExtractor(driver, website)
+        WebPageExtractor(website)
 
         try {
             driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement =>
