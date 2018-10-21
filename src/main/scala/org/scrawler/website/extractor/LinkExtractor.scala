@@ -17,38 +17,35 @@ object LinkExtractor {
     private val driver = new HtmlUnitDriver
     
     def apply(website: URL): Set[URL] = {
-        if (isObviouslyNotHTML(website)) return Set()
+        if (isObviouslyNotHTML(website)) return Set.empty
         
-        try { 
+        try {
             driver.get(website.toString)
         }
 
         catch {
-            case e: java.lang.Exception => return Set(new URL("http://default.com"))
+            case e: java.lang.Exception => return Set.empty
         }
         
         logger.info("Currently scrawling " + website)
 
         WebPageExtractor(driver, website)
 
-        val links = {
-            try {  
-                driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement => 
-                    try {
-                         new URL(element.getAttribute("href"))
-                    }    
-            
-                    catch {
-                        case e: java.net.MalformedURLException => new URL("http://default.com") 
-                    }
-                })
-            }
+        try {
+            driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement =>
+                try {
+                     new URL(element.getAttribute("href"))
+                }
 
-            catch {
-                case e: java.lang.IllegalStateException => Set(new URL("http://default.com")) 
-            }
+                catch {
+                    case e: java.net.MalformedURLException => return Set.empty
+                }
+            })
         }
-        links
+
+        catch {
+            case e: java.lang.IllegalStateException => return Set.empty
+        }
     }
 
     private def isObviouslyNotHTML(website: URL): Boolean = {
