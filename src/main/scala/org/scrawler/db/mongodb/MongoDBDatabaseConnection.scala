@@ -16,7 +16,7 @@ private [db] class MongoDBDatabaseConnection(uri: String, dbName: String) extend
     val mongoClientURI = new MongoClientURI(uri)
     val mongoClient: MongoClient = MongoClient(mongoClientURI) 
 
-    def saveWebPageToDatabase(webPage: WebPage): Unit = {
+    def saveWebPage(webPage: WebPage): Unit = {
         val db = mongoClient(dbName)
         val collection = db("scrawler1")
 
