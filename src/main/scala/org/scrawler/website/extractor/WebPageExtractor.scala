@@ -2,7 +2,7 @@ package org.scrawler.website.extractor
 
 import collection.JavaConverters._
 
-import org.scrawler.website.WebPage
+import org.scrawler.domain.WebPage
 
 import org.openqa.selenium.htmlunit._
 import org.openqa.selenium.WebElement
@@ -28,7 +28,7 @@ object WebPageExtractor {
           keyword: String => keyword.replace(",", "").replace(".", "")
         })
 
-        new WebPage(title, url, body, sanitizedKeywords)
+        WebPage(title, url, body, sanitizedKeywords)
    }
 
     private def headers(implicit driver: HtmlUnitDriver): Set[String] = (1 to 6).flatMap(i => elements(s"h$i")).toSet

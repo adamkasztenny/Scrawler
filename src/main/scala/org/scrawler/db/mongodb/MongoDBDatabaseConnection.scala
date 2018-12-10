@@ -4,7 +4,7 @@ import java.util.Calendar
 
 import com.mongodb.casbah.Imports._
 import org.scrawler.db.DatabaseConnection
-import org.scrawler.website.WebPage
+import org.scrawler.domain.WebPage
 import org.slf4j.LoggerFactory
 
 // thanks to http://mongodb.github.io/casbah/3.1/getting-started/ for all the help!
