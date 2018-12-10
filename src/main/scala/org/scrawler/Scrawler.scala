@@ -4,12 +4,17 @@ import org.scrawler.queue.Queue
 import org.scrawler.db.DatabaseFactory
 import org.scrawler.db.DatabaseConnection
 import org.scrawler.configuration.ConfigurationReader
+import org.scrawler.api.WebPageApi
+import org.scrawler.website.extractor.WebPageExtractor
 import scala.annotation.tailrec
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-object Scrawler {
+object Scrawler extends App {
     private var databaseConnection: DatabaseConnection = null
+    private val webPageApi: WebPageApi = new WebPageApi(databaseConnection)
+    private implicit val driver: HtmlUnitDriver = new HtmlUnitDriver()
 
-    def main(args: Array[String]): Unit = {
+    override def main(args: Array[String]): Unit = {
         val configurationPath = args(0)
         val configuration = ConfigurationReader(configurationPath)
 
@@ -18,14 +23,15 @@ object Scrawler {
 
         runScrawler(queue)
     }
-
-    def getDatabaseConnection = databaseConnection
     
     @tailrec
     private def runScrawler(queue: Queue): Unit =
       if (queue.empty) return
       else {
-        queue.getFromQueueAndAddLinked
+        val currentUrl = queue.dequeue
+        val webPage = WebPageExtractor(currentUrl)
+        webPageApi.saveWebPage(webPage)
+
         runScrawler(queue)
       }
 }

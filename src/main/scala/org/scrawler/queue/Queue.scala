@@ -2,20 +2,22 @@ package org.scrawler.queue
 
 import org.scrawler.website.extractor.LinkExtractor
 import java.net.URL
+import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
-class Queue(seed: Set[String]) {
+class Queue(seed: Set[String])(implicit driver: HtmlUnitDriver) {
     private val websites: collection.mutable.Set[URL] = collection.mutable.Set()
     private val seen: collection.mutable.Set[URL] = collection.mutable.Set()
 
-    websites ++= seed.map(makeURL(_))
+    websites ++= seed.map(makeURL)
 
-    def getFromQueueAndAddLinked = {
+    def dequeue: URL = {
         val current = websites.head
         if (!seen.contains(current)) {
             websites ++= LinkExtractor(current)
             seen += current
         }
         websites -= current
+        current
     }
 
     def empty = websites.isEmpty
