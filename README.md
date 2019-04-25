@@ -11,5 +11,5 @@ or
 
 ```
 sbt assembly
-java -jar /home/adam/scrawler/target/scala-2.12/scrawler-assembly-1.0.0.jar config.json
+java -jar target/scala-2.12/scrawler-assembly-1.0.0.jar config.json
 ```
