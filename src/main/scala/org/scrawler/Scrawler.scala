@@ -10,28 +10,27 @@ import scala.annotation.tailrec
 import org.openqa.selenium.htmlunit.HtmlUnitDriver
 
 object Scrawler extends App {
-    private var databaseConnection: DatabaseConnection = null
-    private val webPageApi: WebPageApi = new WebPageApi(databaseConnection)
-    private implicit val driver: HtmlUnitDriver = new HtmlUnitDriver()
 
     override def main(args: Array[String]): Unit = {
-        val configurationPath = args(0)
+        implicit val driver: HtmlUnitDriver = new HtmlUnitDriver()
+        val configurationPath = args.head
         val configuration = ConfigurationReader(configurationPath)
 
-        databaseConnection = DatabaseFactory(configuration.databaseConfiguration) 
+        val databaseConnection = DatabaseFactory(configuration.databaseConfiguration)
+        val webPageApi = new WebPageApi(databaseConnection)
         val queue = new Queue(configuration.seed)
 
-        runScrawler(queue)
+        runScrawler(queue, webPageApi)
     }
     
     @tailrec
-    private def runScrawler(queue: Queue): Unit =
-      if (queue.empty) return
-      else {
-        val currentUrl = queue.dequeue
-        val webPage = WebPageExtractor(currentUrl)
-        webPageApi.saveWebPage(webPage)
-
-        runScrawler(queue)
-      }
+    private def runScrawler(queue: Queue,
+      webPageApi: WebPageApi)(implicit driver: HtmlUnitDriver): Unit =
+        if (queue.empty) return
+        else {
+          val currentUrl = queue.dequeue
+          val webPage = WebPageExtractor(currentUrl)
+          webPageApi.saveWebPage(webPage)
+          runScrawler(queue, webPageApi)
+        }
 }
