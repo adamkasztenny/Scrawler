@@ -1,9 +1,14 @@
-{ 
-   "seed": ["http://www.alexa.com/topsites", "http://www.scala-lang.org/", "https://en.wikipedia.org", "https://www.utoronto.ca", "http://adam.kasztenny.ca"],
-
-   "database" : {
+{
+  "seed": [
+    "http://www.alexa.com/topsites",
+    "http://www.scala-lang.org/",
+    "https://en.wikipedia.org",
+    "https://www.utoronto.ca",
+    "http://adam.kasztenny.ca"
+  ],
+  "database": {
     "uri": "mongodb://localhost:27017",
     "name": "scrawler",
     "type": "mongodb"
-   }
+  }
 }

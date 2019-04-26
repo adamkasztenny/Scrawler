@@ -1,56 +1,56 @@
 package org.scrawler.website.extractor
 
 import java.net.URL
-import collection.JavaConverters._
+
+import scala.collection.JavaConverters._
 
 // thanks Alvin: http://alvinalexander.com/scala/how-to-use-java-style-logging-slf4j-scala
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 // big thanks to https://joshrendek.com/2013/10/parsing-html-in-scala/ for the HTML parsing stuff
-import org.openqa.selenium.htmlunit._
 import org.openqa.selenium.WebElement
+import org.openqa.selenium.htmlunit._
 
 object LinkExtractor {
-    private val logger = LoggerFactory.getLogger(this.getClass)
-    
-    def apply(website: URL)(implicit driver: HtmlUnitDriver): Set[URL] = {
-        if (isObviouslyNotHTML(website)) return Set.empty
-        
-        try {
-            driver.get(website.toString)
-        }
+  private val logger = LoggerFactory.getLogger(this.getClass)
 
-        catch {
-            case e: java.lang.Exception => return Set(new URL("http://default.com"))
-        }
+  def apply(website: URL)(implicit driver: HtmlUnitDriver): Set[URL] = {
+    if (isObviouslyNotHTML(website)) return Set.empty
 
-        logger.info("Currently scrawling " + website)
-
-        try {
-            driver.findElementsByXPath("//a").asScala.toSet.map({element: WebElement =>
-                try {
-                     new URL(element.getAttribute("href"))
-                }
-
-                catch {
-                    case e: java.net.MalformedURLException => new URL("http://default.com")
-                }
-            })
-        }
-
-        catch {
-            case e: java.lang.IllegalStateException => Set(new URL("http://default.com"))
-        }
+    try {
+      driver.get(website.toString)
     }
 
-    private def isObviouslyNotHTML(website: URL): Boolean = {
-        val websiteString = website.toString
-        websiteString.contains("mailto") ||
-        websiteString.contains(".png")   ||
-        websiteString.contains(".jpeg")  ||
-        websiteString.contains(".pdf")   ||
-        websiteString.contains(".txt") 
-    } 
+    catch {
+      case e: java.lang.Exception => return Set(new URL("http://default.com"))
+    }
+
+    logger.info("Currently scrawling " + website)
+
+    try {
+      driver.findElementsByXPath("//a").asScala.toSet.map({ element: WebElement =>
+        try {
+          new URL(element.getAttribute("href"))
+        }
+
+        catch {
+          case e: java.net.MalformedURLException => new URL("http://default.com")
+        }
+      })
+    }
+
+    catch {
+      case e: java.lang.IllegalStateException => Set(new URL("http://default.com"))
+    }
+  }
+
+  private def isObviouslyNotHTML(website: URL): Boolean = {
+    val websiteString = website.toString
+    websiteString.contains("mailto") ||
+      websiteString.contains(".png") ||
+      websiteString.contains(".jpeg") ||
+      websiteString.contains(".pdf") ||
+      websiteString.contains(".txt")
+  }
 }
 

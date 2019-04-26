@@ -1,7 +1,8 @@
 package org.scrawler.configuration
 
-import org.scalatest.{FunSuite, Matchers}
 import java.io.File
+
+import org.scalatest.{FunSuite, Matchers}
 
 class ConfigurationReaderTest extends FunSuite with Matchers {
 

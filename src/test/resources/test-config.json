@@ -1,9 +1,11 @@
-{ 
-   "seed": ["http://example.com", "http://example.net"],
-
-   "database" : {
+{
+  "seed": [
+    "http://example.com",
+    "http://example.net"
+  ],
+  "database": {
     "uri": "someDb://localhost:4242",
     "name": "someDbName",
     "type": "someDb"
-   }
+  }
 }
