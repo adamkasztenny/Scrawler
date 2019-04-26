@@ -1,4 +1,4 @@
-organization := "slideon"
+organization := "adamkasztenny"
 
 version := "1.0.0"
 
