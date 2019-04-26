@@ -2,3 +2,4 @@ project/project
 project/target
 target/
 *.scala.swp 
+.idea/

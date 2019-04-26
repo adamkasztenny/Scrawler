@@ -19,3 +19,8 @@ libraryDependencies ++= Seq(
 
     "log4j" %  "log4j" % "1.2.17"
 )
+
+libraryDependencies ++= Seq(
+    "org.scalatest" %% "scalatest" % "3.0.5" % Test,
+    "org.scalamock" %% "scalamock" % "4.1.0" % Test
+)
