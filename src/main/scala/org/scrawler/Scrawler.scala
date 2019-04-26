@@ -2,7 +2,6 @@ package org.scrawler
 
 import org.scrawler.queue.Queue
 import org.scrawler.db.DatabaseFactory
-import org.scrawler.db.DatabaseConnection
 import org.scrawler.configuration.ConfigurationReader
 import org.scrawler.api.WebPageApi
 import org.scrawler.website.extractor.WebPageExtractor
