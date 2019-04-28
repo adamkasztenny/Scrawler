@@ -2,6 +2,8 @@ package org.scrawler.website.extractor
 
 import java.net.URL
 
+import org.openqa.selenium.{By, WebDriver}
+
 import scala.collection.JavaConverters._
 
 // thanks Alvin: http://alvinalexander.com/scala/how-to-use-java-style-logging-slf4j-scala
@@ -9,12 +11,11 @@ import org.slf4j.LoggerFactory
 
 // big thanks to https://joshrendek.com/2013/10/parsing-html-in-scala/ for the HTML parsing stuff
 import org.openqa.selenium.WebElement
-import org.openqa.selenium.htmlunit._
 
 object LinkExtractor {
   private val logger = LoggerFactory.getLogger(this.getClass)
 
-  def apply(website: URL)(implicit driver: HtmlUnitDriver): Set[URL] = {
+  def apply(website: URL)(implicit driver: WebDriver): Set[URL] = {
     if (isObviouslyNotHTML(website)) return Set.empty
 
     try {
@@ -28,7 +29,7 @@ object LinkExtractor {
     logger.info("Currently scrawling " + website)
 
     try {
-      driver.findElementsByXPath("//a").asScala.toSet.map({ element: WebElement =>
+      driver.findElements(By.xpath("//a")).asScala.toSet.map({ element: WebElement =>
         try {
           new URL(element.getAttribute("href"))
         }
