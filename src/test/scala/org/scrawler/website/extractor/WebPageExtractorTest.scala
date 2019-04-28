@@ -17,7 +17,9 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
     implicit val driver: WebDriver = mock[WebDriver]
 
     val url: URL = new URL("https://" + Gen.alphaStr)
+  }
 
+  trait AllElementsPresent extends Fixture {
     val title: String = words
     (driver.getTitle _) expects() returning title
 
@@ -36,45 +38,69 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
     val webPage: WebPage = WebPageExtractor(url)
   }
 
-  "extracting a web page" should "include a title, if the page has one" in new Fixture {
+  trait MissingElements extends Fixture {
+    val title: String = null
+    (driver.getTitle _) expects() returning title
+
+    (driver.findElement(_: By)) expects By.xpath("//body") throwing new java.lang.IllegalStateException()
+
+    val bold: String = words
+    (driver.findElements(_: By)) expects By.xpath("//b") throwing new java.lang.IllegalStateException()
+    val strong: String = words
+    (driver.findElements(_: By)) expects By.xpath("//strong") throwing new java.lang.IllegalStateException()
+
+    (1 to 6).foreach(index =>
+      (driver.findElements(_: By)) expects By.xpath(s"//h$index") throwing new java.lang.IllegalStateException())
+
+    val webPage: WebPage = WebPageExtractor(url)
+  }
+
+  "extracting a web page" should "include a title, if the page has one" in new AllElementsPresent {
     webPage.title shouldBe title
   }
 
-  it should "include a blank title, if the page has none" in new Fixture {
-    override val title = null
+  it should "include a blank title, if the page has none" in new MissingElements {
     webPage.title shouldBe ""
   }
 
-  it should "include the URL" in new Fixture {
+  it should "include the URL" in new AllElementsPresent {
     webPage.url shouldBe url
   }
 
-  it should "include the body" in new Fixture {
+  it should "include the body, if there is one" in new AllElementsPresent {
     webPage.body shouldBe body
   }
 
-  it should "include bold and strong text in the keywords" in new Fixture {
+  it should "include a blank body, if the page has none" in new MissingElements {
+    webPage.body shouldBe ""
+  }
+
+  it should "include bold and strong text in the keywords" in new AllElementsPresent {
     webPage.keywords should contain allElementsOf asKeywords(bold) ++ asKeywords(strong)
   }
 
-  it should "include header text in the keywords" in new Fixture {
+  it should "include header text in the keywords" in new AllElementsPresent {
     webPage.keywords should contain allElementsOf headers.flatMap(asKeywords)
   }
 
-  it should "include the title in the keywords" in new Fixture {
+  it should "include the title in the keywords" in new AllElementsPresent {
     webPage.keywords should contain allElementsOf asKeywords(title)
   }
 
-  "keywords" should "not include spaces" in new Fixture {
+  "keywords" should "not include spaces" in new AllElementsPresent {
     webPage.keywords.find(_.contains(" ")) shouldBe empty
   }
 
-  they should "not include dots" in new Fixture {
+  they should "not include dots" in new AllElementsPresent {
     webPage.keywords.find(_.contains(".")) shouldBe empty
   }
 
-  they should "not include commas" in new Fixture {
+  they should "not include commas" in new AllElementsPresent {
     webPage.keywords.find(_.contains(",")) shouldBe empty
+  }
+
+  they should "be empty if the page is missing elements and a title" in new MissingElements {
+    webPage.keywords should contain only ""
   }
 
   private def webElements(text: String): java.util.List[WebElement] = List(webElement(text)).asJava

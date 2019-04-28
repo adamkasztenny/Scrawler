@@ -41,7 +41,7 @@ object WebPageExtractor {
     }
 
     catch {
-      case e: java.lang.IllegalStateException => Set("")
+      case e: java.lang.IllegalStateException => Set.empty[String]
     }
   }
 }
