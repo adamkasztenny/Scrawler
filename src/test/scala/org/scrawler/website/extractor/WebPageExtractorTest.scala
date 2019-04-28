@@ -7,7 +7,7 @@ import org.scalacheck.Gen
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{FlatSpec, Matchers}
 import org.scrawler.Sample._
-import org.scrawler.domain.WebPage
+import org.scrawler.domain.{UrlGenerator, WebPage}
 
 import scala.collection.JavaConverters._
 
@@ -15,8 +15,7 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
 
   trait Fixture {
     implicit val driver: WebDriver = mock[WebDriver]
-
-    val url: URL = new URL("https://" + Gen.alphaStr)
+    val url: URL = UrlGenerator()
   }
 
   trait AllElementsPresent extends Fixture {
