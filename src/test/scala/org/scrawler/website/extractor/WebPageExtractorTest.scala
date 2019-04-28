@@ -40,11 +40,11 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
 
   trait MissingElements extends Fixture {
     (driver.getTitle _) expects() returning null
-    (driver.findElements(_: By)) expects By.xpath("//body") throwing new java.lang.IllegalStateException()
-    (driver.findElements(_: By)) expects By.xpath("//b") throwing new java.lang.IllegalStateException()
-    (driver.findElements(_: By)) expects By.xpath("//strong") throwing new java.lang.IllegalStateException()
+    (driver.findElements(_: By)) expects By.xpath("//body") throwing new IllegalStateException()
+    (driver.findElements(_: By)) expects By.xpath("//b") throwing new IllegalStateException()
+    (driver.findElements(_: By)) expects By.xpath("//strong") throwing new IllegalStateException()
     (1 to 6).foreach(index =>
-      (driver.findElements(_: By)) expects By.xpath(s"//h$index") throwing new java.lang.IllegalStateException())
+      (driver.findElements(_: By)) expects By.xpath(s"//h$index") throwing new IllegalStateException())
 
     val webPage: WebPage = WebPageExtractor(url)
   }
