@@ -14,10 +14,10 @@ class LinkExtractorTest extends FunSuite with Matchers with MockFactory {
 
   trait Fixture {
     implicit val driver: WebDriver = mock[WebDriver]
+    val url: URL = UrlGenerator()
   }
 
   trait LinksPresent extends Fixture {
-    val url: URL = UrlGenerator()
     (driver.get(_: String)) expects url.toString
 
     val links: Seq[String] = Seq(Gen.alphaStr, Gen.alphaStr).map(link => s"https://${sample(link)}")
@@ -54,9 +54,16 @@ class LinkExtractorTest extends FunSuite with Matchers with MockFactory {
     }
   }
 
-  test("should return a list of links on the page") {
+  test("should return a set of links on the page") {
     new LinksPresent {
       LinkExtractor(url) should contain theSameElementsAs links.map(new URL(_))
+    }
+  }
+
+  test("should return an empty set if the web page cannot be retreived") {
+    new Fixture {
+      (driver.get(_: String)) expects url.toString throwing new RuntimeException()
+      LinkExtractor(url) shouldBe empty
     }
   }
 }

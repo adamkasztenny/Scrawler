@@ -23,7 +23,7 @@ object LinkExtractor {
     }
 
     catch {
-      case e: java.lang.Exception => return Set(new URL("http://default.com"))
+      case _: Exception => return Set.empty
     }
 
     logger.info("Currently scrawling " + website)
