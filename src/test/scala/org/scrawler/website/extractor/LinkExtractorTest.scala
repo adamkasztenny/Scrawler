@@ -17,18 +17,6 @@ class LinkExtractorTest extends FunSuite with Matchers with MockFactory {
     val url: URL = UrlGenerator()
   }
 
-  trait LinksPresent extends Fixture {
-    (driver.get(_: String)) expects url.toString
-
-    val links: Seq[String] = Seq(Gen.alphaStr, Gen.alphaStr).map(link => s"https://${sample(link)}")
-    val firstLink = mock[WebElement]
-    (firstLink.getAttribute(_: String)) expects "href" returning links.head
-    val secondLink = mock[WebElement]
-    (secondLink.getAttribute(_: String)) expects "href" returning links.last
-
-    (driver.findElements(_: By)) expects By.xpath("//a") returning List(firstLink, secondLink).asJava
-  }
-
   test("should return empty set for email links") {
     new Fixture {
       LinkExtractor(UrlGenerator("mailto")) shouldBe empty
@@ -55,14 +43,33 @@ class LinkExtractorTest extends FunSuite with Matchers with MockFactory {
   }
 
   test("should return a set of links on the page") {
-    new LinksPresent {
+    new Fixture {
+      (driver.get(_: String)) expects url.toString
+
+      val links: Seq[String] = Seq(Gen.alphaStr, Gen.alphaStr).map(link => s"https://${sample(link)}")
+      val firstLink = mock[WebElement]
+      (firstLink.getAttribute(_: String)) expects "href" returning links.head
+      val secondLink = mock[WebElement]
+      (secondLink.getAttribute(_: String)) expects "href" returning links.last
+
+      (driver.findElements(_: By)) expects By.xpath("//a") returning List(firstLink, secondLink).asJava
+
       LinkExtractor(url) should contain theSameElementsAs links.map(new URL(_))
     }
   }
 
-  test("should return an empty set if the web page cannot be retreived") {
+  test("should return an empty set if the web page cannot be retrieved") {
     new Fixture {
       (driver.get(_: String)) expects url.toString throwing new RuntimeException()
+      LinkExtractor(url) shouldBe empty
+    }
+  }
+
+  test("should return an empty set if there are no links on the page") {
+    new Fixture {
+      (driver.get(_: String)) expects url.toString
+      (driver.findElements(_: By)) expects By.xpath("//a") throwing new IllegalStateException()
+
       LinkExtractor(url) shouldBe empty
     }
   }

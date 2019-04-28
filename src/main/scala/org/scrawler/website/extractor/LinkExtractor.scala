@@ -41,7 +41,7 @@ object LinkExtractor {
     }
 
     catch {
-      case e: java.lang.IllegalStateException => Set(new URL("http://default.com"))
+      case _: IllegalStateException => Set.empty
     }
   }
 
