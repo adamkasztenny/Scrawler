@@ -6,6 +6,7 @@ import org.openqa.selenium.{By, WebDriver, WebElement}
 import org.scrawler.domain.WebPage
 
 import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 object WebPageExtractor {
   def apply(url: URL)(implicit driver: WebDriver): WebPage = {
@@ -25,15 +26,10 @@ object WebPageExtractor {
 
   private def headers(implicit driver: WebDriver): Set[String] = (1 to 6).flatMap(i => elements(s"h$i")).toSet
 
-  private def elements(tag: String)(implicit driver: WebDriver) = {
-    try {
-      driver.findElements(By.xpath("//" + tag)).asScala.toSet.map({ element: WebElement =>
-        element.getText
-      })
+  private def elements(tag: String)(implicit driver: WebDriver) =
+    Try(driver.findElements(By.xpath("//" + tag))) match {
+      case Success(elements) => elements.asScala.toSet.map({ element: WebElement => element.getText })
+      case Failure(_: IllegalStateException) => Set.empty[String]
+      case Failure(exception) => throw exception
     }
-
-    catch {
-      case _: IllegalStateException => Set.empty[String]
-    }
-  }
 }
