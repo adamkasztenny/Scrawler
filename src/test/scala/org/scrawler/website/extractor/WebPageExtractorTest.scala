@@ -80,6 +80,18 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
     webPage.keywords should contain allElementsOf asKeywords(title)
   }
 
+  it should "propagate a non-IllegalStateException if one happens" in new Fixture {
+    (driver.getTitle _) expects() returning null
+    val exception = new RuntimeException(Gen.alphaStr)
+    (driver.findElements(_: By)) expects * throwing exception
+
+    val thrown = intercept[RuntimeException] {
+      WebPageExtractor(url)
+    }
+
+    thrown shouldBe exception
+  }
+
   "keywords" should "not include spaces" in new AllElementsPresent {
     webPage.keywords.find(_.contains(" ")) shouldBe empty
   }
