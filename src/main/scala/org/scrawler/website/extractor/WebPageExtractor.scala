@@ -21,15 +21,7 @@ object WebPageExtractor {
     WebPage(title, url, body, sanitizedKeywords)
   }
 
-  private def body(implicit driver: WebDriver): String = {
-    try {
-      driver.findElement(By.xpath("//body")).getText
-    }
-
-    catch {
-      case e: java.lang.IllegalStateException => ""
-    }
-  }
+  private def body(implicit driver: WebDriver): String = elements("body").headOption.getOrElse("")
 
   private def headers(implicit driver: WebDriver): Set[String] = (1 to 6).flatMap(i => elements(s"h$i")).toSet
 

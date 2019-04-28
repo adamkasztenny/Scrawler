@@ -24,7 +24,7 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
     (driver.getTitle _) expects() returning title
 
     val body: String = words
-    (driver.findElement(_: By)) expects By.xpath("//body") returning webElement(body)
+    (driver.findElements(_: By)) expects By.xpath("//body") returning webElements(body)
 
     val bold: String = words
     (driver.findElements(_: By)) expects By.xpath("//b") returning webElements(bold)
@@ -39,16 +39,10 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
   }
 
   trait MissingElements extends Fixture {
-    val title: String = null
-    (driver.getTitle _) expects() returning title
-
-    (driver.findElement(_: By)) expects By.xpath("//body") throwing new java.lang.IllegalStateException()
-
-    val bold: String = words
+    (driver.getTitle _) expects() returning null
+    (driver.findElements(_: By)) expects By.xpath("//body") throwing new java.lang.IllegalStateException()
     (driver.findElements(_: By)) expects By.xpath("//b") throwing new java.lang.IllegalStateException()
-    val strong: String = words
     (driver.findElements(_: By)) expects By.xpath("//strong") throwing new java.lang.IllegalStateException()
-
     (1 to 6).foreach(index =>
       (driver.findElements(_: By)) expects By.xpath(s"//h$index") throwing new java.lang.IllegalStateException())
 
@@ -103,12 +97,10 @@ class WebPageExtractorTest extends FlatSpec with Matchers with MockFactory {
     webPage.keywords should contain only ""
   }
 
-  private def webElements(text: String): java.util.List[WebElement] = List(webElement(text)).asJava
-
-  private def webElement(text: String): WebElement = {
-    val element = mock[WebElement]
-    (element.getText _) expects() returning text
-    element
+  private def webElements(text: String): java.util.List[WebElement] = {
+    val webElement = mock[WebElement]
+    (webElement.getText _) expects() returning text
+    List(webElement).asJava
   }
 
   private def asKeywords(string: String): Seq[String] = string.toLowerCase.replace(".", "").replace(",", "").split(" ")
