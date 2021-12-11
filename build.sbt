@@ -14,10 +14,10 @@ libraryDependencies ++= Seq(
 
     "org.mongodb" %% "casbah" % "3.1.1",
 
-    "org.slf4j" % "slf4j-api" % "1.7.5",
-    "org.slf4j" % "slf4j-simple" % "1.7.5",
+    "org.slf4j" % "slf4j-api" % "1.7.32",
+    "org.slf4j" % "slf4j-simple" % "1.7.32",
 
-    "log4j" %  "log4j" % "1.2.17"
+    "org.apache.logging.log4j" % "log4j-core" % "2.15.0"
 )
 
 libraryDependencies ++= Seq(
