@@ -2,12 +2,12 @@ organization := "adamkasztenny"
 
 version := "1.0.0"
 
-scalaVersion := "2.12.4"
+scalaVersion := "2.12.15"
 
 resolvers += "Typesafe Repo" at "http://repo.typesafe.com/typesafe/releases/"
 
 libraryDependencies ++= Seq(
-    "com.typesafe.play" %% "play-json" % "2.6.8",
+    "com.typesafe.play" %% "play-json" % "2.9.2",
 
     "org.seleniumhq.webdriver" % "webdriver-selenium" % "0.9.7376",
     "org.seleniumhq.webdriver" % "webdriver-htmlunit" % "0.9.7376",
